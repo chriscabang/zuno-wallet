@@ -1,0 +1,40 @@
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Static and shared libs
+*.a
+*.so
+
+# Executables and build output
+*.out
+*.exe
+*.bin
+*.stamp
+
+# Dependency files
+*.d
+
+# Debugging
+*.gdb
+*.dSYM/
+
+# Logs
+*.log
+
+# IDEs/editors
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Build directories
+build/
+dist/

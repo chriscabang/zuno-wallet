@@ -1,0 +1,8 @@
+[submodule "lib/u8g2"]
+	path = lib/u8g2
+	url = https://github.com/olikraus/u8g2.git
+	ignore = untracked
+[submodule "lib/libbtc"]
+	path = lib/libbtc
+	url = https://github.com/libbtc/libbtc.git
+	ignore = untracked
