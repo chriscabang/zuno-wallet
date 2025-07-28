@@ -1,4 +1,5 @@
 # Object files
+zuno-wallet
 *.o
 *.ko
 *.obj

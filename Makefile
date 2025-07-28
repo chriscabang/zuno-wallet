@@ -1,23 +1,37 @@
 APP=zuno-wallet
 
-CC=gcc
-CFLAGS=-Iinclude -I/usr/include -I../libbtc/include -Wall -O2
-LDFLAGS=../libbtc/build/libbtc.a -lssl -lcrypto
+ROOT     = $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+SRC      = $(wildcard src/*.c)
+INCLUDE  = $(ROOT)/include
+TEST     = test_runner
 
-SRC=src/main.c src/zuno.c src/bip39.c
-TEST=tests/test_wallet
+CFLAGS  += -Wall -O2
+CFLAGS  += -I$(INCLUDE)
+CFLAGS  += -I/usr/include
+CFLAGS  += -Ilib/libbtc/include
+# CFLAGS  += -Ilib/u8g2
+# CFLAGS  += -Ilib/u8g2/sys/linux-i2c/common
+# CFLAGS  += -Ilib/u8g2/csrc
+
+LDFLAGS += -lssl -lcrypto
+LDFLAGS += lib/libbtc/build/libbtc.a
+# LDFLAGS += lib/u8g2/build/libu8g2.a
+
+CC      := gcc
+
+.DEFAULT_GOAL = all
 
 all: $(APP)
-
+# lib/u8g2/sys/linux-i2c/common/linux-i2c.c lib/u8g2/sys/linux-i2c/common/linux-gpio.c
 $(APP): $(SRC)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 tests: $(TEST)
 	./$(TEST)
-
-$(TEST): tests/test_wallet.c src/zuno.c src/bip39.c
+# lib/u8g2/sys/linux-i2c/common/linux-i2c.c lib/u8g2/sys/linux-i2c/common/linux-gpio.c
+$(TEST): tests/test_display.c src/zuno.c src/bip39.c src/oled.c
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) -lcmocka
 
 clean:
 	find . -type f -name $(APP) -delete
-	find tests/ -type f -name "test_*" ! -name "test_*.c" -delete
+	find tests/ -type f -name "test_*" ! -name "*.c" ! -name "*.py" -delete
