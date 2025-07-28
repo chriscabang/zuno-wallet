@@ -15,40 +15,21 @@
 #include <btc/base58.h>
 #include <btc/ecc.h>
 #include <btc/ripemd160.h>
+
+#include "oled.h"
+
 // :FIXME: for BIP84 support, this header is not existing anymore
 // #include <btc/bech32.h> // for BIP84
 
 // :TODO: Use logly for logging
 // :TODO: refactor and clean
+// :TODO: Use cross-compile return like SUCCESS
 
 #define MNEMONIC_BUFFER_SIZE 256
-// #define SEED_BYTES 64
-// 
-// int mnemonic_to_seed(const char* mnemonic, const char* passphrase, uint8_t* seed) {
-//   const char* salt_prefix = "mnemonic"; // :TOD: changed this
-//   char salt[256] = { 0 };
-// 
-//   if (passphrase) {
-//     snprintf(salt, sizeof(salt), "%s%s", salt_prefix, passphrase);
-//   } else {
-//     snprintf(salt, sizeof(salt), "%s", salt_prefix);
-//   }
-// 
-//   int result = PKCS5_PBKDF2_HMAC(
-//     mnemonic,
-//     strlen(mnemonic),
-//     (unsigned char*) salt,
-//     strlen(salt),
-//     2048,
-//     EVP_sha512(),
-//     SEED_BYTES,
-//     seed
-//   );
-// 
-//   return result;
-// }
 
 int main(void) {
+  if (oled_init() != 0) return 1;
+
   // Step 1: Generate mnemonic
   const char* wordlist_file = "utils/english.txt";
   if (load_bip39_wordlist(wordlist_file) != 0) {
@@ -58,8 +39,22 @@ int main(void) {
 
   char mnemonic[MNEMONIC_BUFFER_SIZE];
   generate_mnemonic(mnemonic, sizeof(mnemonic));
-
   printf("Mnemonic: \n%s\n", mnemonic);
+
+  // break mnemonics in char arrays, split by spaces
+  int i = 0;
+  char *tokens[24];
+  char *token = strtok(mnemonic, " ");
+  while (token != NULL && i < 10) {
+    tokens[i++] = token;
+    token = strtok(NULL, " ");
+  }
+  printf("Mnemonic:\n");
+  for (int j = 0; j < i; j++) {
+    printf(" mnemonic[%d] = '%s'\n", j, tokens[j]);
+  }
+
+  oled_draw_text(0, 0, mnemonic);
 
   // Step 2: Convert mnemonic to seed (PBKDF2)
   uint8_t seed[SEED_BYTES];
@@ -136,6 +131,10 @@ int main(void) {
 
   // Cleanup
   btc_ecc_stop();
+
+  sleep(8);
+  oled_clear();
+  oled_close();
 
   return 0;
 }
