@@ -22,31 +22,6 @@
 // :TODO: refactor and clean
 
 #define MNEMONIC_BUFFER_SIZE 256
-// #define SEED_BYTES 64
-// 
-// int mnemonic_to_seed(const char* mnemonic, const char* passphrase, uint8_t* seed) {
-//   const char* salt_prefix = "mnemonic"; // :TOD: changed this
-//   char salt[256] = { 0 };
-// 
-//   if (passphrase) {
-//     snprintf(salt, sizeof(salt), "%s%s", salt_prefix, passphrase);
-//   } else {
-//     snprintf(salt, sizeof(salt), "%s", salt_prefix);
-//   }
-// 
-//   int result = PKCS5_PBKDF2_HMAC(
-//     mnemonic,
-//     strlen(mnemonic),
-//     (unsigned char*) salt,
-//     strlen(salt),
-//     2048,
-//     EVP_sha512(),
-//     SEED_BYTES,
-//     seed
-//   );
-// 
-//   return result;
-// }
 
 int main(void) {
   // Step 1: Generate mnemonic

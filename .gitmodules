@@ -1,0 +1,4 @@
+[submodule "lib/libbtc"]
+	path = lib/libbtc
+	url = https://github.com/libbtc/libbtc.git
+	ignore = untracked
